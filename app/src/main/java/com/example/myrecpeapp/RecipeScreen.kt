@@ -2,6 +2,7 @@ package com.example.myrecpeapp
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -27,9 +28,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun RecipeScreen(modifier: Modifier =Modifier){
-  val receipeViewModel:MainViewModel= viewModel()
-  val viewstate by receipeViewModel.categoriesState
+fun RecipeScreen(modifier: Modifier =Modifier,
+                 viewstate :MainViewModel.ReceipeState,
+                 navigateToDetail:(Category)->Unit){
+  //val receipeViewModel:MainViewModel= viewModel()
+
   Box(modifier = Modifier.fillMaxSize()){
       when {
           viewstate.loading->{
@@ -43,16 +46,16 @@ fun RecipeScreen(modifier: Modifier =Modifier){
               Text(text = "Non è possibile caricare i dati")
           }
           else->{
-              CategoryScreen(viewstate.list)
+              CategoryScreen(viewstate.list,navigateToDetail)
           }
       }
   }}
     @Composable
-    fun CategoryItem(category: Category) {
+    fun CategoryItem(category: Category,navigateToDetail:(Category)->Unit) {
 
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp),
+            .padding(8.dp).clickable {  navigateToDetail(category)},
             horizontalAlignment = Alignment.CenterHorizontally) {
             Image(painter = rememberAsyncImagePainter(category.strCategoryThumb ),
                 contentDescription ="Immagine del piatto",
@@ -70,10 +73,10 @@ fun RecipeScreen(modifier: Modifier =Modifier){
     }
 
 @Composable
-fun CategoryScreen(categories:List<Category>){
+fun CategoryScreen(categories:List<Category>,navigateToDetail:(Category)->Unit){
       LazyVerticalGrid(GridCells.Fixed(2),modifier= Modifier.fillMaxSize()){
             items(categories){
-                category-> CategoryItem(category=category)
+                category-> CategoryItem(category=category,navigateToDetail)
 
             }
 

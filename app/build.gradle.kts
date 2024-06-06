@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -50,6 +51,12 @@ android {
 }
 
 dependencies {
+
+    val nav_version = "2.7.4"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+
     // compose viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     // network calls
